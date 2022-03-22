@@ -29,14 +29,14 @@ android {
             }
         }
     }
-    signingConfigs {
-        suning {
-            keyAlias 'samon'
-            keyPassword 'samonxu'
-            storeFile file("${rootProject.rootDir}/signapk/samon.jks")
-            storePassword 'samonxu'
-        }
-    }
+//    signingConfigs {
+//        suning {
+//            keyAlias 'samon'
+//            keyPassword 'samonxu'
+//            storeFile file("${rootProject.rootDir}/signapk/samon.jks")
+//            storePassword 'samonxu'
+//        }
+//    }
     buildTypes {
         release {
             minifyEnabled true
@@ -44,11 +44,11 @@ android {
             zipAlignEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.suning
+//            signingConfig signingConfigs.suning
         }
         debug {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.suning
+        //    signingConfig signingConfigs.suning
         }
     }
     sourceSets {

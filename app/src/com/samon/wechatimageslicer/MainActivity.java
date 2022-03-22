@@ -17,6 +17,7 @@ import android.support.annotation.UiThread;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -357,13 +358,35 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String path;
+        Uri uri;
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE_PICK) {
-                Uri uri = data.getData();
+                if (data != null) {
+                    uri = data.getData();
+                    if (!TextUtils.isEmpty(uri.getAuthority())) {
+                        Cursor cursor = getContentResolver().query(uri,
+                                new String[] { MediaStore.Images.Media.DATA },null, null, null);
+                        if (null == cursor) {
+                            Toast.makeText(this, "图片没找到", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        cursor.moveToFirst();
+                        path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                        cursor.close();
+                    } else {
+                        path = uri.getPath();
+                    }
+                }else{
+                    Toast.makeText(this, "图片没找到", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+//                Uri uri = data.getData();
                 int h = 0;
                 int w = 0;
                 try {
-                    Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+//                    Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+                    Bitmap bitmap = BitmapFactory.decodeFile(path);
                     h = bitmap.getHeight();
                     w = bitmap.getWidth();
                     bitmap.recycle();
